@@ -1,0 +1,12 @@
+{
+  "extensionName":        { "message": "PQCMail" },
+  "extensionDescription": { "message": "Post-Quantum Cryptography for email and web messaging." },
+  "encryptButton":        { "message": "Encrypt with PQC" },
+  "decryptButton":        { "message": "Decrypt" },
+  "encryptedBadge":       { "message": "PQCMail Encrypted" },
+  "noIdentity":           { "message": "No PQC identity configured. Go to Settings." },
+  "encryptSuccess":       { "message": "Message encrypted with PQC ✓" },
+  "decryptSuccess":       { "message": "Decrypted successfully" },
+  "verifiedSignature":    { "message": "✓ Verified signature from $1" },
+  "unverifiedSignature":  { "message": "⚠ Signature not verified" }
+}

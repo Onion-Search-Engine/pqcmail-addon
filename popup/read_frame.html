@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>PQCMail Read</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; padding: 14px; }
+    .header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #1e293b; }
+    .sig-ok   { font-size: 12px; font-weight: 700; color: #10b981; }
+    .sig-warn { font-size: 12px; font-weight: 700; color: #f59e0b; }
+    .body { font-size: 14px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; color: #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="header" id="header"></div>
+  <div class="body" id="body">Decrypting…</div>
+  <script>
+    window.addEventListener('message', ({ data }) => {
+      if (data?.type !== 'pqcmail:read_data') return;
+      document.getElementById('header').innerHTML = data.verified
+        ? `<span class="sig-ok">✓ Verified — from ${esc(data.sender)}</span>`
+        : `<span class="sig-warn">⚠ No signature verification</span>`;
+      document.getElementById('body').textContent = data.plaintext;
+    });
+    function esc(s = '') { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  </script>
+</body>
+</html>

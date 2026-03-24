@@ -1,0 +1,97 @@
+{
+  "manifest_version": 2,
+  "name": "PQCMail",
+  "version": "0.1.0",
+  "description": "Post-quantum encryption for Gmail, Outlook and any webmail. CRYSTALS-Kyber (ML-KEM) + Dilithium (ML-DSA). All keys stored locally. Zero telemetry.",
+  "author": "PQCServer Project",
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "32":  "icons/icon32.png",
+    "48":  "icons/icon48.png",
+    "64":  "icons/icon64.png",
+    "96":  "icons/icon96.png",
+    "128": "icons/icon128.png"
+  },
+
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    },
+    "default_title": "PQCMail",
+    "default_popup": "popup/popup.html"
+  },
+
+  "background": {
+    "scripts": ["background/service_worker.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mail.google.com/*",
+        "https://mail.yahoo.com/*",
+        "https://outlook.live.com/*",
+        "https://outlook.office.com/*",
+        "https://webmail.onionmail.org/*"
+      ],
+      "js": [
+        "content_scripts/frame_injector.js",
+        "content_scripts/webmail_injector.js",
+        "content_scripts/gmail_injector.js"
+      ],
+      "css": ["content_scripts/injector.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "exclude_matches": [
+        "https://mail.google.com/*",
+        "https://mail.yahoo.com/*",
+        "https://outlook.live.com/*",
+        "https://outlook.office.com/*"
+      ],
+      "js": [
+        "content_scripts/frame_injector.js",
+        "content_scripts/generic_injector.js"
+      ],
+      "css": ["content_scripts/injector.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+
+  "permissions": [
+    "storage",
+    "activeTab",
+    "clipboardWrite",
+    "clipboardRead",
+    "notifications",
+    "https://api.pqcserver.com/*"
+  ],
+
+  "web_accessible_resources": [
+    "popup/compose_frame.html",
+    "popup/read_frame.html",
+    "crypto/pqc_lib.js",
+    "icons/*.png"
+  ],
+
+  "content_security_policy": "script-src 'self'; object-src 'self';",
+
+  "default_locale": "en",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pqcmail@pqcserver.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}

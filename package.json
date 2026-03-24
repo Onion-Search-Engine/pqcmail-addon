@@ -1,0 +1,19 @@
+{
+  "name": "pqcmail",
+  "version": "0.1.0",
+  "description": "Post-Quantum Cryptography Firefox Extension",
+  "private": true,
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "@noble/post-quantum": "0.5.4",
+    "@noble/hashes": "1.7.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.20.2"
+  },
+  "licenses": [
+    { "type": "MIT", "url": "https://opensource.org/licenses/MIT" }
+  ]
+}

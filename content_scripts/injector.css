@@ -1,0 +1,342 @@
+/* ─── PQCMail Injected UI Styles ─────────────────────────────────────────────
+   All selectors are namespaced to avoid conflicts with host page styles.
+   We use high specificity + shadow-DOM-like isolation via class naming.
+────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Reset for all PQCMail elements ── */
+.pqcmail-btn, .pqcmail-bar-btn, .pqcmail-wm-btn,
+.pqcmail-modal-btn, .pqcmail-decrypt-banner-btn {
+  all: unset;
+  cursor: pointer;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+/* ── Floating Bar (generic injector) ── */
+#pqcmail-floating-bar {
+  all: unset;
+  position: absolute;
+  z-index: 2147483647;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #e2e8f0;
+  user-select: none;
+}
+
+#pqcmail-floating-bar.pqcmail-bar--visible {
+  display: flex;
+}
+
+.pqcmail-bar-logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.5px;
+  padding-right: 6px;
+  border-right: 1px solid #334155;
+}
+
+.pqcmail-bar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #0ea5e9;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.pqcmail-bar-btn:hover { background: #0284c7; }
+
+.pqcmail-bar-btn--secondary {
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+.pqcmail-bar-btn--secondary:hover {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.pqcmail-bar-close {
+  all: unset;
+  cursor: pointer;
+  color: #475569;
+  font-size: 13px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.pqcmail-bar-close:hover { color: #e2e8f0; }
+
+/* ── Gmail Compose Button ── */
+.pqcmail-compose-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  margin-right: 6px;
+  background: #0f172a;
+  color: #38bdf8;
+  border: 1px solid #0ea5e9;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pqcmail-compose-btn:hover {
+  background: #1e3a5f;
+}
+
+/* ── Decrypt Banner (Gmail + webmail) ── */
+.pqcmail-decrypt-bar,
+.pqcmail-decrypt-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  background: #0f172a;
+  border: 1px solid #0ea5e9;
+  border-radius: 6px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.pqcmail-badge {
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.pqcmail-decrypt-btn,
+.pqcmail-decrypt-banner-btn,
+.pqcmail-wm-btn {
+  padding: 4px 12px;
+  background: #0ea5e9;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+}
+
+.pqcmail-decrypt-btn:hover,
+.pqcmail-decrypt-banner-btn:hover,
+.pqcmail-wm-btn:hover {
+  background: #0284c7;
+}
+
+/* ── Decrypted plaintext overlays ── */
+.pqcmail-plaintext-overlay,
+.pqcmail-decrypted-overlay,
+.pqcmail-wm-decrypted {
+  padding: 14px 16px;
+  background: #0f172a;
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+
+.pqcmail-plaintext-header,
+.pqcmail-decrypted-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.pqcmail-sig-ok {
+  color: #10b981;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pqcmail-sig-unknown {
+  color: #f59e0b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pqcmail-overlay-close {
+  all: unset;
+  cursor: pointer;
+  font-size: 11px;
+  color: #475569;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #334155;
+}
+
+.pqcmail-overlay-close:hover { color: #e2e8f0; border-color: #64748b; }
+
+.pqcmail-plaintext-body,
+.pqcmail-wm-plaintext,
+.pqcmail-decrypted-inline,
+.pqcmail-decrypted-body {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── Inline badge (static page text) ── */
+.pqcmail-inline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #1e293b;
+  border: 1px solid #0ea5e9;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.pqcmail-inline-decrypt {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pqcmail-inline-decrypt:hover { text-decoration: underline; }
+
+/* ── Modal ── */
+.pqcmail-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.pqcmail-modal {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 24px 28px;
+  width: 360px;
+  max-width: 92vw;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  color: #e2e8f0;
+}
+
+.pqcmail-modal-title {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.pqcmail-modal-label {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.pqcmail-modal-input {
+  width: 100%;
+  padding: 8px 10px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: #f1f5f9;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.pqcmail-modal-input:focus { border-color: #0ea5e9; }
+
+.pqcmail-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.pqcmail-modal-btn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: #94a3b8;
+  transition: background 0.15s;
+}
+
+.pqcmail-modal-btn:hover { background: #334155; color: #e2e8f0; }
+
+.pqcmail-modal-btn--primary {
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+  color: #fff;
+}
+
+.pqcmail-modal-btn--primary:hover { background: #0284c7; border-color: #0284c7; }
+
+/* ── Webmail button wrapper ── */
+.pqcmail-wm-btn-wrapper {
+  margin-bottom: 6px;
+}
+
+/* ── Toast ── */
+.pqcmail-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #0f172a;
+  border: 1px solid #334155;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  max-width: 320px;
+}
+
+.pqcmail-toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pqcmail-toast--success { border-color: #10b981; color: #10b981; }
+.pqcmail-toast--error   { border-color: #ef4444; color: #ef4444; }
+.pqcmail-toast--warn    { border-color: #f59e0b; color: #f59e0b; }
+.pqcmail-toast--info    { border-color: #38bdf8; color: #38bdf8; }

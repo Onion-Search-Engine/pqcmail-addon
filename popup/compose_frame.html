@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>PQCMail Compose</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; padding: 12px; }
+    textarea { width: 100%; min-height: 200px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #f1f5f9; font-size: 14px; font-family: inherit; padding: 10px; resize: vertical; outline: none; }
+    textarea:focus { border-color: #0ea5e9; }
+    .bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .label { font-size: 11px; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn { padding: 5px 14px; border-radius: 6px; border: none; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; background: #0ea5e9; color: #fff; }
+    .btn:hover { background: #0284c7; }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <span class="label">🔒 PQCMail Secured Compose</span>
+    <button class="btn" id="done-btn">Done</button>
+  </div>
+  <textarea id="area" placeholder="Type your plaintext message. It will be encrypted when you click Done."></textarea>
+  <script>
+    document.getElementById('done-btn').addEventListener('click', () => {
+      window.parent.postMessage({ type: 'pqcmail:compose_done', text: document.getElementById('area').value }, '*');
+    });
+    window.addEventListener('message', ({ data }) => {
+      if (data?.type === 'pqcmail:focus') document.getElementById('area').focus();
+    });
+  </script>
+</body>
+</html>

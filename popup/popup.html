@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>PQCMail</title>
+  <link rel="stylesheet" href="popup.css"/>
+</head>
+<body>
+<div id="app">
+  <header class="header">
+    <div class="header-logo">
+      <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2L3 8.5l13 6.5 13-6.5L16 2z" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M3 17l13 6.5L29 17" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M3 23l13 6.5L29 23" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span class="logo-text">PQCMail</span>
+      <span class="logo-version" id="version-badge">v0.1</span>
+    </div>
+    <div class="header-status">
+      <span class="status-dot" id="worker-dot" title="Crypto engine"></span>
+      <span class="status-dot" id="server-dot" title="PQCServer"></span>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-label">Active Identity</div>
+    <div class="identity-row">
+      <select id="identity-select" class="identity-select">
+        <option value="">— No identity —</option>
+      </select>
+      <button class="icon-btn" id="new-identity-btn" title="Generate new identity">+</button>
+    </div>
+    <div class="fingerprint-row" id="fingerprint-row">
+      <span class="fingerprint-label">Fingerprint:</span>
+      <code class="fingerprint-val" id="fingerprint-val"></code>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Quick Actions</div>
+    <div class="action-grid">
+      <button class="action-btn" id="encrypt-btn">🔒<span>Encrypt</span></button>
+      <button class="action-btn" id="decrypt-btn">🔓<span>Decrypt</span></button>
+      <button class="action-btn" id="sign-btn">✍️<span>Sign</span></button>
+      <button class="action-btn" id="lookup-btn">🔍<span>Lookup Key</span></button>
+    </div>
+  </section>
+
+  <!-- Panels (shown on demand) -->
+  <div id="encrypt-panel" class="panel">
+    <div class="panel-header"><span>Encrypt Message</span><button class="close-btn" data-close="encrypt-panel">✕</button></div>
+    <div class="panel-body">
+      <label class="field-label">Recipient email</label>
+      <input type="email" id="enc-recipient" class="field-input" placeholder="recipient@example.com"/>
+      <label class="field-label">Message</label>
+      <textarea id="enc-message" class="field-textarea" rows="5" placeholder="Your secret message…"></textarea>
+      <button class="primary-btn" id="enc-submit">Encrypt →</button>
+      <div id="enc-output" class="output-block">
+        <textarea class="output-textarea" id="enc-result" readonly rows="6"></textarea>
+        <button class="copy-btn" id="enc-copy">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="decrypt-panel" class="panel">
+    <div class="panel-header"><span>Decrypt Message</span><button class="close-btn" data-close="decrypt-panel">✕</button></div>
+    <div class="panel-body">
+      <label class="field-label">Paste armored PQCMail block</label>
+      <textarea id="dec-input" class="field-textarea" rows="6" placeholder="-----BEGIN PQCMAIL MESSAGE-----&#10;…"></textarea>
+      <button class="primary-btn" id="dec-submit">Decrypt →</button>
+      <div id="dec-output" class="output-block">
+        <div id="dec-sig-status"></div>
+        <div class="output-plaintext" id="dec-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="keygen-panel" class="panel">
+    <div class="panel-header"><span>Generate PQC Key Pair</span><button class="close-btn" data-close="keygen-panel">✕</button></div>
+    <div class="panel-body">
+      <label class="field-label">Email address</label>
+      <input type="email" id="kg-email" class="field-input" placeholder="you@example.com"/>
+      <label class="field-label">KEM Algorithm</label>
+      <select id="kg-kem" class="field-input">
+        <option value="ml-kem-768">Kyber768 (recommended)</option>
+        <option value="ml-kem-1024">Kyber1024 (max security)</option>
+        <option value="ml-kem-768">Hybrid X25519 + Kyber768</option>
+      </select>
+      <label class="field-label">Signature Algorithm</label>
+      <select id="kg-sig" class="field-input">
+        <option value="ml-dsa-65">Dilithium3 (recommended)</option>
+        <option value="ml-dsa-87">Dilithium5 (max security)</option>
+        <option value="slh-dsa-shake-256s">SPHINCS+-SHAKE-256s</option>
+      </select>
+      <label class="checkbox-label">
+        <input type="checkbox" id="kg-publish" checked/>
+        Publish to PQCServer
+      </label>
+      <button class="primary-btn" id="kg-submit">Generate Keys</button>
+      <div id="kg-result" class="keygen-result"></div>
+    </div>
+  </div>
+
+  <div id="lookup-panel" class="panel">
+    <div class="panel-header"><span>Lookup Public Key</span><button class="close-btn" data-close="lookup-panel">✕</button></div>
+    <div class="panel-body">
+      <label class="field-label">Email address</label>
+      <input type="email" id="lu-email" class="field-input" placeholder="someone@example.com"/>
+      <button class="primary-btn" id="lu-submit">Search</button>
+      <div id="lu-result" class="lookup-result"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <button class="footer-link" id="options-btn">⚙ Settings</button>
+    <span>·</span>
+    <button class="footer-link" id="pqcserver-btn">🌐 PQCServer</button>
+  </footer>
+
+  <div id="loading" class="loading-overlay">
+    <div class="spinner"></div>
+    <span id="loading-text">Working…</span>
+  </div>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>

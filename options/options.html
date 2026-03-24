@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>PQCMail — Settings</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg0:#080f1a; --bg1:#0f172a; --bg2:#1e293b; --bg3:#334155;
+      --accent:#0ea5e9; --accent2:#38bdf8; --green:#10b981;
+      --yellow:#f59e0b; --red:#ef4444;
+      --text0:#f8fafc; --text1:#e2e8f0; --text2:#94a3b8; --text3:#475569;
+    }
+    body { background:var(--bg0); color:var(--text1); font-family:'Segoe UI',system-ui,sans-serif; font-size:14px; min-height:100vh; }
+    .page { max-width:720px; margin:0 auto; padding:32px 20px; }
+    .page-header { display:flex; align-items:center; gap:12px; margin-bottom:32px; border-bottom:1px solid var(--bg3); padding-bottom:20px; }
+    .page-title { font-size:22px; font-weight:700; color:var(--text0); }
+    .page-sub { font-size:13px; color:var(--text3); margin-top:2px; }
+    .section { margin-bottom:28px; }
+    .section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text3); margin-bottom:14px; }
+    .card { background:var(--bg1); border:1px solid var(--bg3); border-radius:10px; overflow:hidden; }
+    .card-row { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--bg2); }
+    .card-row:last-child { border-bottom:none; }
+    .card-row-label { font-size:13px; font-weight:600; color:var(--text1); }
+    .card-row-desc { font-size:12px; color:var(--text3); margin-top:2px; }
+    .badge { font-size:10px; padding:2px 7px; border-radius:4px; font-weight:700; }
+    .badge-green { background:rgba(16,185,129,0.15); color:var(--green); }
+    .badge-blue  { background:rgba(14,165,233,0.15); color:var(--accent2); }
+    .badge-gray  { background:var(--bg2); color:var(--text3); }
+    table { width:100%; border-collapse:collapse; }
+    thead th { text-align:left; font-size:11px; color:var(--text3); font-weight:600; padding:10px 14px; border-bottom:1px solid var(--bg3); }
+    tbody td { padding:12px 14px; border-bottom:1px solid var(--bg2); font-size:12px; color:var(--text2); }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:hover td { background:var(--bg2); }
+    .mono { font-family:'Courier New',monospace; font-size:10px; color:var(--accent2); }
+    .btn { padding:6px 14px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid; font-family:inherit; transition:0.15s; }
+    .btn-primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .btn-primary:hover { background:#0284c7; }
+    .btn-danger  { background:transparent; border-color:var(--red); color:var(--red); }
+    .btn-danger:hover  { background:rgba(239,68,68,0.1); }
+    .btn-ghost   { background:var(--bg2); border-color:var(--bg3); color:var(--text2); }
+    .btn-ghost:hover { background:var(--bg3); color:var(--text0); }
+    input[type=text], input[type=email], input[type=url], select {
+      padding:7px 10px; background:var(--bg2); border:1px solid var(--bg3);
+      border-radius:6px; color:var(--text1); font-size:13px; font-family:inherit; outline:none; width:100%;
+    }
+    input:focus, select:focus { border-color:var(--accent); }
+    .field { display:flex; flex-direction:column; gap:5px; }
+    .field label { font-size:12px; color:var(--text3); font-weight:600; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .empty-state { padding:28px; text-align:center; color:var(--text3); font-size:13px; }
+    #status-bar { position:fixed; bottom:0; left:0; right:0; padding:10px 20px; background:var(--bg1); border-top:1px solid var(--bg3); font-size:12px; color:var(--text3); display:none; }
+    #status-bar.visible { display:block; }
+    #status-bar.ok   { color:var(--green); }
+    #status-bar.err  { color:var(--red); }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="page-header">
+    <svg viewBox="0 0 32 32" fill="none" width="36" height="36">
+      <path d="M16 2L3 8.5l13 6.5 13-6.5L16 2z" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M3 17l13 6.5L29 17M3 23l13 6.5L29 23" stroke="#0ea5e9" stroke-width="1.8" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div class="page-title">PQCMail Settings</div>
+      <div class="page-sub">Post-Quantum Cryptography Firefox Extension</div>
+    </div>
+  </div>
+
+  <!-- Identities -->
+  <div class="section">
+    <div class="section-title">My PQC Identities</div>
+    <div class="card">
+      <div id="identities-table-container">
+        <table>
+          <thead><tr><th>Email</th><th>KEM Algorithm</th><th>Fingerprint</th><th>Status</th><th></th></tr></thead>
+          <tbody id="identities-tbody">
+            <tr><td colspan="5" class="empty-state">No identities yet. Generate your first PQC key pair below.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generate New Identity -->
+  <div class="section">
+    <div class="section-title">Generate New Key Pair</div>
+    <div class="card" style="padding:16px">
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" id="new-email" placeholder="you@example.com"/>
+        </div>
+        <div class="field">
+          <label>KEM Algorithm</label>
+          <select id="new-kem">
+            <option value="ml-kem-768">Kyber768 (NIST ML-KEM – recommended)</option>
+            <option value="ml-kem-1024">Kyber1024 (max security)</option>
+            <option value="hybrid-x25519-kyber768">Hybrid X25519 + Kyber768</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Signature Algorithm</label>
+          <select id="new-sig">
+            <option value="ml-dsa-65">Dilithium3 (NIST ML-DSA – recommended)</option>
+            <option value="ml-dsa-87">Dilithium5 (max security)</option>
+            <option value="slh-dsa-shake-256s">SPHINCS+-SHAKE-256s (hash-based)</option>
+          </select>
+        </div>
+        <div class="field" style="justify-content:flex-end;flex-direction:row;align-items:flex-end;gap:8px">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)">
+            <input type="checkbox" id="new-publish" checked/>
+            Publish to PQCServer
+          </label>
+          <button class="btn btn-primary" id="generate-btn">Generate</button>
+        </div>
+      </div>
+      <div id="keygen-status" style="font-size:12px;color:var(--text3);display:none;padding-top:8px;border-top:1px solid var(--bg3)"></div>
+    </div>
+  </div>
+
+  <!-- PQCServer Config -->
+  <div class="section">
+    <div class="section-title">PQCServer Connection</div>
+    <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="field">
+        <label>API Base URL</label>
+        <input type="url" id="pqcserver-url" placeholder="https://api.pqcserver.com/v1"/>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span id="server-status-text" style="font-size:12px;color:var(--text3)">Not tested</span>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" id="test-server-btn">Test Connection</button>
+          <button class="btn btn-primary" id="save-server-btn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Import/Export -->
+  <div class="section">
+    <div class="section-title">Import / Export</div>
+    <div class="card">
+      <div class="card-row">
+        <div>
+          <div class="card-row-label">Export Keyring</div>
+          <div class="card-row-desc">Download all keys as encrypted JSON backup</div>
+        </div>
+        <button class="btn btn-ghost" id="export-btn">Export</button>
+      </div>
+      <div class="card-row">
+        <div>
+          <div class="card-row-label">Import Keyring</div>
+          <div class="card-row-desc">Restore keys from a PQCMail backup file</div>
+        </div>
+        <button class="btn btn-ghost" id="import-btn">Import</button>
+      </div>
+      <div class="card-row">
+        <div>
+          <div class="card-row-label">Import PGP Key (legacy)</div>
+          <div class="card-row-desc">Import contacts with PGP keys for mixed-mode messages</div>
+        </div>
+        <button class="btn btn-ghost" id="pgp-import-btn">Import PGP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Algorithms Info -->
+  <div class="section">
+    <div class="section-title">Supported Algorithms</div>
+    <div class="card">
+      <div class="card-row">
+        <div><div class="card-row-label">Kyber768</div><div class="card-row-desc">NIST ML-KEM standard — 128-bit post-quantum security</div></div>
+        <span class="badge badge-green">KEM</span>
+      </div>
+      <div class="card-row">
+        <div><div class="card-row-label">Kyber1024</div><div class="card-row-desc">Higher security level — 256-bit post-quantum</div></div>
+        <span class="badge badge-green">KEM</span>
+      </div>
+      <div class="card-row">
+        <div><div class="card-row-label">X25519 + Kyber768</div><div class="card-row-desc">Hybrid mode — classical + post-quantum simultaneously</div></div>
+        <span class="badge badge-blue">HYBRID</span>
+      </div>
+      <div class="card-row">
+        <div><div class="card-row-label">Dilithium3</div><div class="card-row-desc">NIST ML-DSA standard — lattice-based digital signature</div></div>
+        <span class="badge badge-green">SIG</span>
+      </div>
+      <div class="card-row">
+        <div><div class="card-row-label">SPHINCS+-SHAKE-256s</div><div class="card-row-desc">Hash-based signature — different hardness assumption</div></div>
+        <span class="badge badge-blue">SIG</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="status-bar"></div>
+
+<script>
+'use strict';
+
+const msg = (type, data = {}) => browser.runtime.sendMessage({ type, data });
+
+function showStatus(text, type = 'info') {
+  const bar = document.getElementById('status-bar');
+  bar.textContent = text;
+  bar.className = `visible ${type}`;
+  setTimeout(() => bar.classList.remove('visible'), 4000);
+}
+
+// ── Load identities ──────────────────────────────────────────────────────────
+
+async function loadIdentities() {
+  const resp = await msg('pqcmail:get_identities');
+  const tbody = document.getElementById('identities-tbody');
+  const ids = resp.identities || [];
+
+  if (!ids.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No identities yet. Generate your first PQC key pair below.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = ids.map(id => `
+    <tr>
+      <td>${escHtml(id.email)}</td>
+      <td><code class="mono">${escHtml(id.algo)}</code></td>
+      <td><code class="mono">${escHtml(id.fingerprint || '')}</code></td>
+      <td><span class="badge badge-green">Active</span></td>
+      <td style="text-align:right">
+        <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px" onclick="publishKey('${escHtml(id.email)}')">Publish</button>
+        <button class="btn btn-danger" style="padding:4px 8px;font-size:11px;margin-left:4px" onclick="deleteKey('${escHtml(id.email)}')">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+window.publishKey = async (email) => {
+  const resp = await msg('pqcmail:publish_key', { email });
+  if (resp.success) showStatus(`✓ Key for ${email} published to PQCServer`, 'ok');
+  else showStatus(`Error: ${resp.error}`, 'err');
+};
+
+window.deleteKey = async (email) => {
+  if (!confirm(`Delete all keys for ${email}? This cannot be undone.`)) return;
+  const { keyring = {} } = await browser.storage.local.get('keyring');
+  delete keyring[email.toLowerCase()];
+  await browser.storage.local.set({ keyring });
+  await loadIdentities();
+  showStatus('Key deleted', 'ok');
+};
+
+// ── Generate new key ──────────────────────────────────────────────────────────
+
+document.getElementById('generate-btn').addEventListener('click', async () => {
+  const email = document.getElementById('new-email').value.trim();
+  const algo  = document.getElementById('new-kem').value;
+  const sig   = document.getElementById('new-sig').value;
+  const pub   = document.getElementById('new-publish').checked;
+
+  if (!email) { alert('Enter an email address'); return; }
+
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+
+  const kgStatus = document.getElementById('keygen-status');
+  kgStatus.style.display = 'block';
+  kgStatus.textContent = 'Generating keys (this may take a few seconds)…';
+
+  const resp = await msg('pqcmail:keygen_request', { email, algo, sigAlgo: sig, hybrid: algo.startsWith('hybrid') });
+
+  if (resp.success) {
+    if (pub) {
+      kgStatus.textContent = 'Publishing to PQCServer…';
+      await msg('pqcmail:publish_key', { email });
+    }
+    kgStatus.innerHTML = `<span style="color:var(--green)">✓ Key pair generated!</span> Fingerprint: <code class="mono">${escHtml(resp.fingerprint)}</code>${pub ? ' — published to PQCServer' : ''}`;
+    await loadIdentities();
+  } else {
+    kgStatus.innerHTML = `<span style="color:var(--red)">✗ Failed: ${escHtml(resp.error)}</span>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Generate';
+});
+
+// ── PQCServer config ──────────────────────────────────────────────────────────
+
+async function loadServerConfig() {
+  const { pqcserverUrl } = await browser.storage.local.get('pqcserverUrl');
+  if (pqcserverUrl) document.getElementById('pqcserver-url').value = pqcserverUrl;
+}
+
+document.getElementById('save-server-btn').addEventListener('click', async () => {
+  const url = document.getElementById('pqcserver-url').value.trim();
+  await browser.storage.local.set({ pqcserverUrl: url });
+  showStatus('Server URL saved', 'ok');
+});
+
+document.getElementById('test-server-btn').addEventListener('click', async () => {
+  const status = await msg('pqcmail:get_status');
+  const el = document.getElementById('server-status-text');
+  el.textContent = status.serverOnline ? '✓ PQCServer is reachable' : '✗ PQCServer not reachable';
+  el.style.color = status.serverOnline ? 'var(--green)' : 'var(--red)';
+});
+
+// ── Export ────────────────────────────────────────────────────────────────────
+
+document.getElementById('export-btn').addEventListener('click', async () => {
+  const { keyring = {} } = await browser.storage.local.get('keyring');
+  // Export only public keys + metadata (no private keys in plain export)
+  const safe = Object.fromEntries(
+    Object.entries(keyring).map(([email, k]) => [email, {
+      email, algo: k.algo, sigAlgo: k.sigAlgo,
+      publicKey: k.publicKey, sigPublicKey: k.sigPublicKey,
+      fingerprint: k.fingerprint, createdAt: k.createdAt,
+    }])
+  );
+  const blob = new Blob([JSON.stringify({ version: '0.1', exported: Date.now(), keyring: safe }, null, 2)],
+    { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `pqcmail-keyring-${Date.now()}.json`;
+  a.click();
+});
+
+function escHtml(s = '') {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadIdentities();
+loadServerConfig();
+</script>
+</body>
+</html>
