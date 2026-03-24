@@ -1,0 +1,28 @@
+# Build artifacts
+node_modules/
+dist/
+artifacts/
+*.xpi
+*.zip
+
+# Build output (rigenerato con: node build.js)
+# Nota: crypto/pqc_lib.js è incluso nel repo per comodità
+# ma può essere rigenerato da pqc_entry.js
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env (non presente, ma per sicurezza)
+.env
+.env.*
