@@ -41,21 +41,21 @@
 <table>
 <tr>
 <td align="center">
-<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/screenshot-1-popup.png" width="320" alt="Popup"/>
+<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/pqcmail-screenshot-1-popup.png" width="320" alt="Popup"/>
 <br/><sub><b>Popup — active identity</b></sub>
 </td>
 <td align="center">
-<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/screenshot-2-encrypt.png" width="320" alt="Encrypt panel"/>
+<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/pqcmail-screenshot-2-encrypt.png" width="320" alt="Encrypt panel"/>
 <br/><sub><b>Encrypt message panel</b></sub>
 </td>
 </tr>
 <tr>
 <td align="center">
-<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/screenshot-3-gmail-banner.png" width="320" alt="Gmail banner"/>
+<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/pqcmail-screenshot-3-gmail-banner.png" width="320" alt="Gmail banner"/>
 <br/><sub><b>Gmail — injected decrypt banner</b></sub>
 </td>
 <td align="center">
-<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/screenshot-4-decrypted.png" width="320" alt="Decrypted email"/>
+<img src="https://github.com/Onion-Search-Engine/pqcmail-addon/blob/main/docs/pqcmail-screenshot-4-decrypted.png" width="320" alt="Decrypted email"/>
 <br/><sub><b>Decrypted email with verified ML-DSA signature</b></sub>
 </td>
 </tr>
