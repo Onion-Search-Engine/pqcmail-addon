@@ -321,7 +321,7 @@ For bug reports and feature requests, please use [GitHub Issues](https://github.
 
 If you discover a security vulnerability, please **do not** open a public issue. Instead, email us at:
 
-📧 **security@pqcserver.com**
+📧 **info@onionsearchengine.com**
 
 We aim to respond within 48 hours and will coordinate a responsible disclosure.
 
